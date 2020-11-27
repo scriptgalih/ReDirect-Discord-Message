@@ -125,3 +125,5 @@ dmypy.json
 
 .idea
 *.json
+cred.json
+cogs/dbCred.json
