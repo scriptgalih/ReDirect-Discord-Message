@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands, timers
+from discord.ext.commands import CommandNotFound
 import asyncio
 import json
 import pymongo
@@ -20,6 +21,7 @@ class mailModGII(commands.Bot):
                          intents=intents
                          )
         self.client = commands.Bot
+
         self.client.remove_command(self, name='help')
         self.token = credentials['token']
         self.load_extension('cogs.redirectmail')
@@ -33,6 +35,13 @@ class mailModGII(commands.Bot):
         print(self.user.name)
         print(self.user.id)
         print('------')
+        game = discord.Game("Nawaytes")
+        await self.client.change_presence(self, status=discord.Status.idle, activity=game)
+
+    async def on_command_error(self, ctx, error):
+        if isinstance(error, CommandNotFound):
+            return
+        raise error
 
     def run(self):
         super().run(self.token)

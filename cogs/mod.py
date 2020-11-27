@@ -36,7 +36,7 @@ class Mod(commands.Cog):
             "admin": []
         }
         print(serverinfo)
-        if col_serverinfo.find_one({}, {'guild': guild.id}) is None:
+        if col_serverinfo.find_one({'guild': guild.id}) is None:
             col_serverinfo.insert_one(serverinfo)
 
         user = self.client.get_user(guild.owner.id)
@@ -48,8 +48,6 @@ class Mod(commands.Cog):
             return
         if ctx.author.id not in [self.bot_owner, ctx.guild.owner.id]:
             return
-        if col_serverinfo.find_one({'guild':ctx.guild.id}) is not None:
-            return
         serverinfo = {
             "guild": ctx.guild.id,
             "guild_owner": ctx.guild.owner.id,
@@ -57,8 +55,12 @@ class Mod(commands.Cog):
             "greeting_message":"Hai selamat datang di channel ini!",
             "admin": []
         }
-        if col_serverinfo.find_one({}, {'guild': ctx.guild.id}) is None:
+        print(f'{ctx.guild.id}')
+        # print(col_serverinfo.find_one({'guild': ctx.guild.id}))
+        print(list(col_serverinfo.find()))
+        if col_serverinfo.find_one({'guild': ctx.guild.id}) is None:
             col_serverinfo.insert_one(serverinfo)
+            await ctx.send(f'{ctx.guild.id}', delete_after=5)
         await ctx.send(f"hi <@{ctx.author.id}>!!!, this server is ready to use mailmod", delete_after=5)
 
 
